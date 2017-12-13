@@ -35,6 +35,18 @@ public class Day01 extends AbstractDay {
 
     @Override
     public void task2() {
+        String[] input = getInput().get(0).split("");
+        int level = 0;
+        int firstBasementCharIndex = 0;
 
+        for (int i = 0; i < input.length; i++) {
+            level += parseInputCharToFloorChange(input[i]);
+            firstBasementCharIndex++;
+            if (level == -1) {
+                break;
+            }
+        }
+
+        System.out.println("Task 2: Char position of first basement is " + firstBasementCharIndex);
     }
 }

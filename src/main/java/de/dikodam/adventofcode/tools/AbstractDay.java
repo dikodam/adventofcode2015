@@ -23,4 +23,9 @@ public abstract class AbstractDay {
             throw new RuntimeException(e);
         }
     }
+
+    public List<String> getInput() {
+        return getInput(getClass().getSimpleName());
+    }
+
 }
