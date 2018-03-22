@@ -7,9 +7,7 @@ import java.util.Arrays;
 public class Day01 extends AbstractDay {
 
     public static void main(String[] args) {
-        Day01 day01 = new Day01();
-        day01.task1();
-        day01.task2();
+        doTheMagic(Day01.class);
     }
 
     @Override
