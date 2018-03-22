@@ -37,4 +37,14 @@ public abstract class AbstractDay {
         return getInput(getClass().getSimpleName());
     }
 
+    protected static <T extends AbstractDay> void doTheMagic(Class<T> clazz) {
+        try {
+            T day = clazz.newInstance();
+            day.task1();
+            day.task2();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
