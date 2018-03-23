@@ -17,7 +17,8 @@ public class Day02 extends AbstractDay {
     public void task1() {
         long area = getInput()
             .stream()
-            .map(this::parseAreas)
+            .map(this::parseDimensions)
+            .map(this::dimensionsToAreas)
             .mapToInt(this::computeWholeArea)
             .sum();
         System.out.println("area needed: " + area);
@@ -31,12 +32,18 @@ public class Day02 extends AbstractDay {
         return minArea + 2 * (a + b + c);
     }
 
-    private Triple<Integer, Integer, Integer> parseAreas(String line) {
+    private Triple<Integer, Integer, Integer> parseDimensions(String line) {
         String[] dimensions = line.split("x");
+        return new Triple<>(
+            Integer.parseInt(dimensions[0]),
+            Integer.parseInt(dimensions[1]),
+            Integer.parseInt(dimensions[2]));
+    }
 
-        final int length = Integer.parseInt(dimensions[0]);
-        final int width = Integer.parseInt(dimensions[1]);
-        final int height = Integer.parseInt(dimensions[2]);
+    private Triple<Integer, Integer, Integer> dimensionsToAreas(Triple<Integer, Integer, Integer> dimensions) {
+        int length = dimensions.getA();
+        int width = dimensions.getB();
+        int height = dimensions.getC();
 
         final int area1 = length * width;
         final int area2 = width * height;
@@ -45,12 +52,29 @@ public class Day02 extends AbstractDay {
         return new Triple<>(area1, area2, area3);
     }
 
-    private int square(int i) {
-        return i * i;
-    }
-
     @Override
     public void task2() {
+        int ribbonLength = getInput()
+            .stream()
+            .map(this::parseDimensions)
+            .mapToInt(this::computeRibbonLength)
+            .sum();
 
+        System.out.println("Ribbon length: " + ribbonLength);
+    }
+
+    private int computeRibbonLength(Triple<Integer, Integer, Integer> dimensions) {
+        return shortesDistanceAroundSides(dimensions) + volume(dimensions);
+    }
+
+    private int shortesDistanceAroundSides(Triple<Integer, Integer, Integer> dimensions) {
+        int d1 = 2 * (dimensions.getA() + dimensions.getB());
+        int d2 = 2 * (dimensions.getA() + dimensions.getC());
+        int d3 = 2 * (dimensions.getB() + dimensions.getC());
+        return Math.min(d1, Math.min(d2, d3));
+    }
+
+    private int volume(Triple<Integer, Integer, Integer> triple) {
+        return triple.getA() * triple.getB() * triple.getC();
     }
 }
