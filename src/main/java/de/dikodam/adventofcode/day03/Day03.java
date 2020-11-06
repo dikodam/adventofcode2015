@@ -20,10 +20,10 @@ public class Day03 extends AbstractDay {
 
     @Override
     public void task1() {
-        List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movements = getMovements();
-        Iterator<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movementsIterator = movements.iterator();
+        List<Movement> movements = getMovements();
+        Iterator<Movement> movementsIterator = movements.iterator();
         long visitedPositionsCount = Stream
-                .iterate(new Tuple<>(0, 0), previousTuple -> movementsIterator.next().apply(previousTuple))
+                .iterate(new Position(0, 0), previousTuple -> movementsIterator.next().apply(previousTuple))
                 .limit(movements.size())
                 .distinct()
                 .count();
@@ -31,23 +31,22 @@ public class Day03 extends AbstractDay {
         System.out.println("T1: visited positions: " + visitedPositionsCount);
     }
 
-    private List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> getMovements() {
-        return Arrays.
-                stream(getInputLines().get(0).split(""))
+    private List<Movement> getMovements() {
+        return streamFirstInputLine()
                 .map(this::inputToMovement)
                 .collect(toList());
     }
 
-    private Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>> inputToMovement(String input) {
+    private Movement inputToMovement(String input) {
         switch (input) {
             case "^":
-                return (position) -> new Tuple<>(position.getA(), position.getB() + 1);
+                return (position) -> new Position(position.getA(), position.getB() + 1);
             case "<":
-                return (position) -> new Tuple<>(position.getA() - 1, position.getB());
+                return (position) -> new Position(position.getA() - 1, position.getB());
             case ">":
-                return (position) -> new Tuple<>(position.getA() + 1, position.getB());
+                return (position) -> new Position(position.getA() + 1, position.getB());
             case "v":
-                return (position) -> new Tuple<>(position.getA(), position.getB() - 1);
+                return (position) -> new Position(position.getA(), position.getB() - 1);
             default:
                 throw new IllegalArgumentException(input);
         }
@@ -61,10 +60,10 @@ public class Day03 extends AbstractDay {
         // even movements are for santa
         // uneven movements are for robo santa
 
-        List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movements = getMovements();
+        List<Movement> movements = getMovements();
 
-        Stream<Tuple<Integer, Integer>> santaPositionsStream = buildTupleStream(movements, i -> i % 2 == 0);
-        Stream<Tuple<Integer, Integer>> roboSantaPositionsStream = buildTupleStream(movements, i -> i % 2 != 0);
+        Stream<Position> santaPositionsStream = buildTupleStream(movements, i -> i % 2 == 0);
+        Stream<Position> roboSantaPositionsStream = buildTupleStream(movements, i -> i % 2 != 0);
 
         long positionCount = Stream.concat(santaPositionsStream, roboSantaPositionsStream)
                 .distinct()
@@ -73,16 +72,16 @@ public class Day03 extends AbstractDay {
         System.out.println("T2: positions visited: " + positionCount);
     }
 
-    private Stream<Tuple<Integer, Integer>> buildTupleStream(List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movements, IntPredicate movementFilter) {
-        List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> filteredMovements = IntStream
+    private Stream<Position> buildTupleStream(List<Movement> movements, IntPredicate movementFilter) {
+        List<Movement> filteredMovements = IntStream
                 .range(0, movements.size())
                 .filter(movementFilter)
                 .mapToObj(movements::get)
                 .collect(toList());
 
-        Iterator<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> iterator = filteredMovements.iterator();
+        Iterator<Movement> iterator = filteredMovements.iterator();
 
-        return Stream.iterate(new Tuple<>(0, 0), previousTuple -> iterator.next().apply(previousTuple))
+        return Stream.iterate(new Position(0, 0), previousTuple -> iterator.next().apply(previousTuple))
                 .limit(filteredMovements.size())
                 .distinct();
     }
