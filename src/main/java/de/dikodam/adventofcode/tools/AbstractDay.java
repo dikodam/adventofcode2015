@@ -27,6 +27,10 @@ public abstract class AbstractDay {
         return inputLines;
     }
 
+    public Stream<String> streamInputLines() {
+        return getInputLines().stream();
+    }
+
     public Stream<String> streamFirstInputLine() {
         return Arrays.stream(getInputLines().get(0).split(""));
     }
