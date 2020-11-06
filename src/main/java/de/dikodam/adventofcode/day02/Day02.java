@@ -3,6 +3,9 @@ package de.dikodam.adventofcode.day02;
 import de.dikodam.adventofcode.tools.AbstractDay;
 import de.dikodam.adventofcode.tools.Triple;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Math.min;
+
 public class Day02 extends AbstractDay {
 
     public static void main(String[] args) {
@@ -28,16 +31,13 @@ public class Day02 extends AbstractDay {
         final int a = areaTriple.getA();
         final int b = areaTriple.getB();
         final int c = areaTriple.getC();
-        final int minArea = Math.min(a, Math.min(b, c));
+        final int minArea = min(a, min(b, c));
         return minArea + 2 * (a + b + c);
     }
 
     private Triple<Integer, Integer, Integer> parseDimensions(String line) {
         String[] dimensions = line.split("x");
-        return new Triple<>(
-                Integer.parseInt(dimensions[0]),
-                Integer.parseInt(dimensions[1]),
-                Integer.parseInt(dimensions[2]));
+        return new Triple<>(parseInt(dimensions[0]), parseInt(dimensions[1]), parseInt(dimensions[2]));
     }
 
     private Triple<Integer, Integer, Integer> dimensionsToAreas(Triple<Integer, Integer, Integer> dimensions) {
@@ -68,10 +68,15 @@ public class Day02 extends AbstractDay {
     }
 
     private int shortesDistanceAroundSides(Triple<Integer, Integer, Integer> dimensions) {
-        int d1 = 2 * (dimensions.getA() + dimensions.getB());
-        int d2 = 2 * (dimensions.getA() + dimensions.getC());
-        int d3 = 2 * (dimensions.getB() + dimensions.getC());
-        return Math.min(d1, Math.min(d2, d3));
+        int length = dimensions.getA();
+        int width = dimensions.getB();
+        int height = dimensions.getC();
+
+        int d1 = 2 * (length + width);
+        int d2 = 2 * (length + height);
+        int d3 = 2 * (width + height);
+
+        return min(d1, min(d2, d3));
     }
 
     private int volume(Triple<Integer, Integer, Integer> triple) {
