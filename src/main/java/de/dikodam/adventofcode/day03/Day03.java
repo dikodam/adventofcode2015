@@ -1,12 +1,9 @@
 package de.dikodam.adventofcode.day03;
 
 import de.dikodam.adventofcode.tools.AbstractDay;
-import de.dikodam.adventofcode.tools.Tuple;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -20,11 +17,9 @@ public class Day03 extends AbstractDay {
 
     @Override
     public void task1() {
-        List<Movement> movements = getMovements();
-        Iterator<Movement> movementsIterator = movements.iterator();
-        long visitedPositionsCount = Stream
-                .iterate(new Position(0, 0), previousTuple -> movementsIterator.next().apply(previousTuple))
-                .limit(movements.size())
+        Iterator<Movement> movements = getMovements().iterator();
+        long visitedPositionsCount = Stream.iterate(new Position(0, 0), previousPosition -> movements.next().apply(previousPosition))
+                .limit(getMovements().size())
                 .distinct()
                 .count();
 
@@ -40,13 +35,13 @@ public class Day03 extends AbstractDay {
     private Movement inputToMovement(String input) {
         switch (input) {
             case "^":
-                return (position) -> new Position(position.getA(), position.getB() + 1);
+                return (pos) -> new Position(pos.getA(), pos.getB() + 1);
             case "<":
-                return (position) -> new Position(position.getA() - 1, position.getB());
+                return (pos) -> new Position(pos.getA() - 1, pos.getB());
             case ">":
-                return (position) -> new Position(position.getA() + 1, position.getB());
+                return (pos) -> new Position(pos.getA() + 1, pos.getB());
             case "v":
-                return (position) -> new Position(position.getA(), position.getB() - 1);
+                return (pos) -> new Position(pos.getA(), pos.getB() - 1);
             default:
                 throw new IllegalArgumentException(input);
         }
@@ -62,27 +57,27 @@ public class Day03 extends AbstractDay {
 
         List<Movement> movements = getMovements();
 
-        Stream<Position> santaPositionsStream = buildTupleStream(movements, i -> i % 2 == 0);
-        Stream<Position> roboSantaPositionsStream = buildTupleStream(movements, i -> i % 2 != 0);
+        Stream<Position> santaPositions = extractPositions(movements, i -> i % 2 == 0);
+        Stream<Position> roboSantaPositions = extractPositions(movements, i -> i % 2 != 0);
 
-        long positionCount = Stream.concat(santaPositionsStream, roboSantaPositionsStream)
+        long distinctPositionCount = Stream.concat(santaPositions, roboSantaPositions)
                 .distinct()
                 .count();
 
-        System.out.println("T2: positions visited: " + positionCount);
+        System.out.println("T2: positions visited: " + distinctPositionCount);
     }
 
-    private Stream<Position> buildTupleStream(List<Movement> movements, IntPredicate movementFilter) {
-        List<Movement> filteredMovements = IntStream
+    private Stream<Position> extractPositions(List<Movement> movements, IntPredicate moveCondition) {
+        List<Movement> actualMovementsList = IntStream
                 .range(0, movements.size())
-                .filter(movementFilter)
+                .filter(moveCondition)
                 .mapToObj(movements::get)
                 .collect(toList());
 
-        Iterator<Movement> iterator = filteredMovements.iterator();
+        Iterator<Movement> moves = actualMovementsList.iterator();
 
-        return Stream.iterate(new Position(0, 0), previousTuple -> iterator.next().apply(previousTuple))
-                .limit(filteredMovements.size())
+        return Stream.iterate(new Position(0, 0), previousPosition -> moves.next().apply(previousPosition))
+                .limit(actualMovementsList.size())
                 .distinct();
     }
 }
