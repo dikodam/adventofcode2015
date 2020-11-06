@@ -38,7 +38,6 @@ public class Triple<A, B, C> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(a, b, c);
     }
 }

@@ -7,20 +7,20 @@ import java.util.Arrays;
 public class Day01 extends AbstractDay {
 
     public static void main(String[] args) {
-        doTheMagic(Day01.class);
+        new Day01().performTasks();
     }
 
     @Override
     public void task1() {
-        String input = getInput(getClass().getSimpleName()).get(0);
+        String input = getInputLines().get(0);
         int sum = Arrays.stream(input.split(""))
-            .mapToInt(this::parseInputCharToFloorChange)
-            .sum();
+                .mapToInt(this::parseInputCharToFloorChange)
+                .sum();
 
         System.out.println("Task 1: final floor level is: " + sum);
     }
 
-    private int parseInputCharToFloorChange(String directionChar) {
+    int parseInputCharToFloorChange(String directionChar) {
         switch (directionChar) {
             case ")":
                 return -1;
@@ -33,12 +33,12 @@ public class Day01 extends AbstractDay {
 
     @Override
     public void task2() {
-        String[] input = getInput().get(0).split("");
+        String[] input = getInputLines().get(0).split("");
         int level = 0;
         int firstBasementCharIndex = 0;
 
-        for (int i = 0; i < input.length; i++) {
-            level += parseInputCharToFloorChange(input[i]);
+        for (String s : input) {
+            level += parseInputCharToFloorChange(s);
             firstBasementCharIndex++;
             if (level == -1) {
                 break;

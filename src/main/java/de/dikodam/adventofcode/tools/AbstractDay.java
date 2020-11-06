@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractDay {
@@ -15,27 +16,27 @@ public abstract class AbstractDay {
 
     public abstract void task2();
 
-    public List<String> getInput(String fileName) {
-        try (BufferedReader br = new BufferedReader(new FileReader(
-            new File(getClass().getResource("/" + fileName).toURI())))) {
+    private List<String> inputLines;
+
+    public List<String> getInputLines() {
+        if (inputLines == null) {
+            inputLines = readInput();
+        }
+        return inputLines;
+    }
+
+    private List<String> readInput() {
+        String fileName = getClass().getSimpleName();
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(getClass().getResource("/" + fileName).toURI())))) {
             return br.lines().collect(toList());
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<String> getInput() {
-        return getInput(getClass().getSimpleName());
-    }
-
-    protected static <T extends AbstractDay> void doTheMagic(Class<T> clazz) {
-        try {
-            T day = clazz.newInstance();
-            day.task1();
-            day.task2();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    protected void performTasks() {
+        task1();
+        task2();
     }
 
 }

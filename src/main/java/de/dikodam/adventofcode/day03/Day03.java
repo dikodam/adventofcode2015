@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 
 public class Day03 extends AbstractDay {
     public static void main(String[] args) {
-        doTheMagic(Day03.class);
+        new Day03().performTasks();
     }
 
     @Override
@@ -23,19 +23,19 @@ public class Day03 extends AbstractDay {
         List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movements = getMovements();
         Iterator<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movementsIterator = movements.iterator();
         long visitedPositionsCount = Stream
-            .iterate(new Tuple<>(0, 0), previousTuple -> movementsIterator.next().apply(previousTuple))
-            .limit(movements.size())
-            .distinct()
-            .count();
+                .iterate(new Tuple<>(0, 0), previousTuple -> movementsIterator.next().apply(previousTuple))
+                .limit(movements.size())
+                .distinct()
+                .count();
 
         System.out.println("T1: visited positions: " + visitedPositionsCount);
     }
 
     private List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> getMovements() {
         return Arrays.
-            stream(getInput().get(0).split(""))
-            .map(this::inputToMovement)
-            .collect(toList());
+                stream(getInputLines().get(0).split(""))
+                .map(this::inputToMovement)
+                .collect(toList());
     }
 
     private Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>> inputToMovement(String input) {
@@ -67,23 +67,23 @@ public class Day03 extends AbstractDay {
         Stream<Tuple<Integer, Integer>> roboSantaPositionsStream = buildTupleStream(movements, i -> i % 2 != 0);
 
         long positionCount = Stream.concat(santaPositionsStream, roboSantaPositionsStream)
-            .distinct()
-            .count();
+                .distinct()
+                .count();
 
         System.out.println("T2: positions visited: " + positionCount);
     }
 
     private Stream<Tuple<Integer, Integer>> buildTupleStream(List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> movements, IntPredicate movementFilter) {
         List<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> filteredMovements = IntStream
-            .range(0, movements.size())
-            .filter(movementFilter)
-            .mapToObj(movements::get)
-            .collect(toList());
+                .range(0, movements.size())
+                .filter(movementFilter)
+                .mapToObj(movements::get)
+                .collect(toList());
 
         Iterator<Function<Tuple<Integer, Integer>, Tuple<Integer, Integer>>> iterator = filteredMovements.iterator();
 
         return Stream.iterate(new Tuple<>(0, 0), previousTuple -> iterator.next().apply(previousTuple))
-            .limit(filteredMovements.size())
-            .distinct();
+                .limit(filteredMovements.size())
+                .distinct();
     }
 }

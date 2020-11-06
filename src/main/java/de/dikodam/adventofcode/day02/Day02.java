@@ -6,7 +6,7 @@ import de.dikodam.adventofcode.tools.Triple;
 public class Day02 extends AbstractDay {
 
     public static void main(String[] args) {
-        doTheMagic(Day02.class);
+        new Day02().performTasks();
     }
 
     // format: lxwxh
@@ -15,12 +15,12 @@ public class Day02 extends AbstractDay {
 
     @Override
     public void task1() {
-        long area = getInput()
-            .stream()
-            .map(this::parseDimensions)
-            .map(this::dimensionsToAreas)
-            .mapToInt(this::computeWholeArea)
-            .sum();
+        long area = getInputLines()
+                .stream()
+                .map(this::parseDimensions)
+                .map(this::dimensionsToAreas)
+                .mapToInt(this::computeWholeArea)
+                .sum();
         System.out.println("area needed: " + area);
     }
 
@@ -35,9 +35,9 @@ public class Day02 extends AbstractDay {
     private Triple<Integer, Integer, Integer> parseDimensions(String line) {
         String[] dimensions = line.split("x");
         return new Triple<>(
-            Integer.parseInt(dimensions[0]),
-            Integer.parseInt(dimensions[1]),
-            Integer.parseInt(dimensions[2]));
+                Integer.parseInt(dimensions[0]),
+                Integer.parseInt(dimensions[1]),
+                Integer.parseInt(dimensions[2]));
     }
 
     private Triple<Integer, Integer, Integer> dimensionsToAreas(Triple<Integer, Integer, Integer> dimensions) {
@@ -54,11 +54,11 @@ public class Day02 extends AbstractDay {
 
     @Override
     public void task2() {
-        int ribbonLength = getInput()
-            .stream()
-            .map(this::parseDimensions)
-            .mapToInt(this::computeRibbonLength)
-            .sum();
+        int ribbonLength = getInputLines()
+                .stream()
+                .map(this::parseDimensions)
+                .mapToInt(this::computeRibbonLength)
+                .sum();
 
         System.out.println("Ribbon length: " + ribbonLength);
     }

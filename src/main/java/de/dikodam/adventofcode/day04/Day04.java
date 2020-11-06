@@ -5,7 +5,7 @@ import de.dikodam.adventofcode.tools.AbstractDay;
 public class Day04 extends AbstractDay {
 
     public static void main(String[] args) {
-        doTheMagic(Day04.class);
+        new Day04().performTasks();
     }
 
     @Override
