@@ -27,6 +27,7 @@ public class Day01 extends AbstractDay {
             case "(":
                 return 1;
             default:
+                // could be return 0, but I want to know if something goes wrong in the input file
                 throw new IllegalArgumentException(directionChar);
         }
     }
@@ -35,16 +36,12 @@ public class Day01 extends AbstractDay {
     public void task2() {
         String[] input = getInputLines().get(0).split("");
         int level = 0;
-        int firstBasementCharIndex = 0;
-
-        for (String s : input) {
-            level += parseInputCharToFloorChange(s);
-            firstBasementCharIndex++;
-            if (level == -1) {
-                break;
-            }
+        int counter = 0;
+        while (level >= 0) {
+            level += parseInputCharToFloorChange(input[counter]);
+            counter++;
         }
 
-        System.out.println("Task 2: Char position of first basement is " + firstBasementCharIndex);
+        System.out.println("Task 2: Char position of first basement is " + counter);
     }
 }
