@@ -13,7 +13,7 @@ public class Day01 extends AbstractDay {
     @Override
     public void task1() {
         String input = getInputLines().get(0);
-        int sum = Arrays.stream(input.split(""))
+        int sum = streamFirstInputLine()
                 .mapToInt(this::parseInputCharToFloorChange)
                 .sum();
 
