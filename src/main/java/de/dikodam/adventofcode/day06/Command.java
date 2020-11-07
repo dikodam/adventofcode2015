@@ -18,25 +18,13 @@ public class Command {
         this.operation = operation;
     }
 
-    public boolean[][] execute(boolean[][] grid) {
+    public <T> T[][] execute(T[][] grid, InterpretationStrategy<T> commandInterpretationStrategy) {
         for (int x = begin.getX(); x <= end.getX(); x++) {
             for (int y = begin.getY(); y <= end.getY(); y++) {
-                grid[x][y] = changeLight(grid[x][y]);
+                grid[x][y] = commandInterpretationStrategy.apply(grid[x][y], operation);
             }
         }
         return grid;
-    }
-
-    boolean changeLight(boolean light) {
-        switch (operation) {
-            case TOGGLE:
-                return !light;
-            case TURN_ON:
-                return true;
-            case TURN_OFF:
-                return false;
-        }
-        throw new IllegalStateException("this should never happen. operation is " + operation);
     }
 
 }
